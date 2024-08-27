@@ -1,0 +1,17 @@
+{
+    "id": "my_plugin",
+    "version": "1.0.0",
+    "name": "My Plugin",
+    "description": "",
+    "author": [
+        "Fallen_Breath"
+    ],
+    "link": "https://github.com/Fallen-Breath/MCDReforgedPluginTemplate",
+    "dependencies": {
+    },
+    "entrypoint": "my_plugin.entry",
+
+    "resources": [
+        "lang"
+    ]
+}
