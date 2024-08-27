@@ -1,4 +1,4 @@
-MCDReforged Plugin Template
+# Snapshot Follower
 -----
 
-A template for my MCDReforged plugin
+Keep your Minecraft server up-to-date with the latest snapshot

@@ -1,15 +1,15 @@
 {
-    "id": "my_plugin",
+    "id": "snapshot_follower",
     "version": "1.0.0",
-    "name": "My Plugin",
+    "name": "Snapshot Follower",
     "description": "",
     "author": [
         "Fallen_Breath"
     ],
-    "link": "https://github.com/Fallen-Breath/MCDReforgedPluginTemplate",
+    "link": "https://github.com/Fallen-Breath/SnapshotFollower",
     "dependencies": {
     },
-    "entrypoint": "my_plugin.entry",
+    "entrypoint": "snapshot_follower.entry",
 
     "resources": [
         "lang"
