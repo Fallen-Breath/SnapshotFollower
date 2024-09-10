@@ -92,13 +92,19 @@ class SnapshotFollowerWorker:
 
 			self.__stop_event.wait(self.config.check_interval)
 
-	def __request_get(self, url: str, timeout: float, stream: bool) -> requests.Response:
+	def __get_request_proxy_dict(self) -> Optional[dict]:
 		proxies = {}
 		if self.config.http_proxy:
 			proxies['http'] = self.config.http_proxy
 		if self.config.https_proxy:
 			proxies['https'] = self.config.https_proxy
-		return requests.get(url, proxies=proxies if proxies else None, timeout=timeout, stream=stream)
+		if len(proxies) == 0:
+			proxies = None
+		return proxies
+
+	def __request_get(self, url: str, timeout: float, stream: bool) -> requests.Response:
+		proxies = self.__get_request_proxy_dict()
+		return requests.get(url, proxies=proxies, timeout=timeout, stream=stream)
 
 	def __request_get_json(self, url: str) -> dict:
 		rsp = self.__request_get(url, timeout=self.config.request_timeout, stream=False)
@@ -206,3 +212,23 @@ class SnapshotFollowerWorker:
 
 		self.logger.info(f'Starting the server, enjoy the new snapshot {latest_snapshot}~')
 		self.server.start()
+
+		self.__trigger_webhook(latest_snapshot)
+
+	def __trigger_webhook(self, version: str):
+		wc = self.config.webhook
+		if not wc.enabled:
+			return
+
+		proxies = None
+		if wc.use_http_proxy:
+			proxies = self.__get_request_proxy_dict()
+		rsp = requests.post(
+			url=wc.url,
+			headers=wc.headers,
+			data=wc.body.replace('{{version}}', version),
+			proxies=proxies,
+			timeout=self.config.request_timeout,
+		)
+		self.logger.info(f'Webhook triggered, rsp {rsp.status_code} {rsp.text!r}')
+		rsp.raise_for_status()

@@ -1,4 +1,14 @@
+from typing import Dict
+
 from mcdreforged.api.all import Serializable
+
+
+class WebHookConfig(Serializable):
+	enabled: bool = True
+	use_http_proxy: bool = False
+	url: str = 'http://127.0.0.1:8080/example/path'
+	headers: Dict[str, str] = {}
+	body: str = 'Server has been updated to {{version}}'
 
 
 class Config(Serializable):
@@ -10,3 +20,5 @@ class Config(Serializable):
 	https_proxy: str = ''
 
 	request_timeout: float = 10
+
+	webhook: WebHookConfig = WebHookConfig()
