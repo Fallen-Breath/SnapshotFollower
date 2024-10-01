@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Optional
 
 from mcdreforged.api.all import Serializable
 
@@ -13,12 +13,13 @@ class WebHookConfig(Serializable):
 
 class Config(Serializable):
 	enabled: bool = True
+
 	check_interval: float = 60
 	server_jar_path: str = 'server/server.jar'
+	keep_downloaded_jar: bool = True
 
-	http_proxy: str = ''
-	https_proxy: str = ''
-
+	http_proxy: Optional[str] = None
+	https_proxy: Optional[str] = None
 	request_timeout: float = 10
 
 	webhook: WebHookConfig = WebHookConfig()

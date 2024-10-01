@@ -208,6 +208,11 @@ class SnapshotFollowerWorker:
 
 		self.logger.info('Replacing the server jar')
 		shutil.copy(jar_path, self.config.server_jar_path)
+		if not self.config.keep_downloaded_jar:
+			try:
+				jar_path.unlink()
+			except OSError as e:
+				self.logger.error(f'Deleting the downloaded server jar at {jar_path} failed: {e}')
 		self.__prev_snapshot = latest_snapshot
 
 		self.logger.info(f'Starting the server, enjoy the new snapshot {latest_snapshot}~')
