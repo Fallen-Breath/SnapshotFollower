@@ -2,7 +2,7 @@
     "id": "snapshot_follower",
     "version": "1.0.1",
     "name": "Snapshot Follower",
-    "description": "",
+    "description": "Keep your Minecraft server up-to-date with the latest snapshot",
     "author": [
         "Fallen_Breath"
     ],
@@ -12,6 +12,7 @@
     "entrypoint": "snapshot_follower.entry",
 
     "resources": [
-        "lang"
+        "lang",
+        "LICENSE"
     ]
 }
