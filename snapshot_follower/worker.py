@@ -1,3 +1,4 @@
+import collections
 import contextlib
 import hashlib
 import json
@@ -35,6 +36,7 @@ class SnapshotFollowerWorker:
 		self.__thread: Optional[threading.Thread] = None
 		self.__stop_event = threading.Event()
 		self.__prev_snapshot: Optional[str] = None
+		self.__known_versions: 'collections.OrderedDict[str, bool]' = collections.OrderedDict()
 
 	def start(self):
 		if self.__thread is not None:
@@ -67,6 +69,13 @@ class SnapshotFollowerWorker:
 				hasher.update(chunk)
 		return hasher.hexdigest()
 
+	def __add_known_version(self, version: str):
+		if version in self.__known_versions:
+			return
+		self.__known_versions[version] = True
+		while len(self.__known_versions) > 1000:
+			self.__known_versions.popitem(last=False)
+
 	def __read_server_jar_version(self):
 		jar_path = Path(self.config.server_jar_path)
 		try:
@@ -76,6 +85,7 @@ class SnapshotFollowerWorker:
 		else:
 			self.logger.info(f'Parsed version from server jar {str(jar_path)!r}: {server_jar_version}')
 			self.__prev_snapshot = server_jar_version
+			self.__add_known_version(server_jar_version)
 
 	def on_server_start(self):
 		self.__read_server_jar_version()
@@ -146,6 +156,9 @@ class SnapshotFollowerWorker:
 			self.__prev_snapshot = latest_snapshot
 			return
 
+		if latest_snapshot in self.__known_versions:
+			self.logger.debug(f'Latest snapshot {latest_snapshot} is already known, mojank server is joking')
+			return
 		if self.__prev_snapshot == latest_snapshot:
 			self.logger.debug(f'Latest snapshot unchanged, {latest_snapshot}')
 			return
@@ -214,6 +227,7 @@ class SnapshotFollowerWorker:
 			except OSError as e:
 				self.logger.error(f'Deleting the downloaded server jar at {jar_path} failed: {e}')
 		self.__prev_snapshot = latest_snapshot
+		self.__add_known_version(latest_snapshot)
 
 		self.logger.info(f'Starting the server, enjoy the new snapshot {latest_snapshot}~')
 		self.server.start()
