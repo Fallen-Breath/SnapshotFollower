@@ -27,6 +27,7 @@
     "check_interval": 60.0,  // 每次检查的间隔时间
     "server_jar_path": "server/server.jar",  // 服务端 jar 文件的路径，需要可写以便进行更新
     "keep_downloaded_jar": true,  // 更新后是否保留下载的 server.jar 文件。下载的 jar 文件将位于 `config/snapshot_follower/jars`
+    "version_blacklist": [],  // 版本黑名单。位于里面的版本号会被忽略。如果你希望跳过某些快照版本，就可以用这个黑名单
 
     "http_proxy": "http://127.0.0.1:1081",  // 可选项，HTTP 请求时使用的 HTTP 代理 URL
     "https_proxy": "http://127.0.0.1:1081",  // 可选项，HTTP 请求时使用的 HTTPS 代理 URL

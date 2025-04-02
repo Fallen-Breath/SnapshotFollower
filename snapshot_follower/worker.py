@@ -162,6 +162,9 @@ class SnapshotFollowerWorker:
 		if self.__prev_snapshot == latest_snapshot:
 			self.logger.debug(f'Latest snapshot unchanged, {latest_snapshot}')
 			return
+		if latest_snapshot in self.config.version_blacklist:
+			self.logger.debug(f'Latest snapshot is in blacklist, skipped, {latest_snapshot}')
+			return
 		for item in version_manifest.get('versions', []):
 			if item['id'] == latest_snapshot:
 				latest_snapshot_url: str = item['url']

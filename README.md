@@ -27,6 +27,7 @@ Config file path: `config/snapshot_follower/config.json`
     "check_interval": 60.0,  // Interval between each check
     "server_jar_path": "server/server.jar",  // Path of the server jar file. It needs to be writeable for the update-ability
     "keep_downloaded_jar": true,  // If it should keep the downloaded server.jar file after updating. Downloaded jars will be at `config/snapshot_follower/jars`
+    "version_blacklist": [],  // A version blacklist. Versions inside will be ignored. Useful for skipping those unwanted snapshots
   
     "http_proxy": "http://127.0.0.1:1081",  // Optional, a http proxy url to be used for HTTP requesting
     "https_proxy": "http://127.0.0.1:1081",  // Optional, a http proxy url to be used for HTTP requesting

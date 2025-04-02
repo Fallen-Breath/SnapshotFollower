@@ -1,4 +1,4 @@
-from typing import Dict, Optional
+from typing import Dict, Optional, List
 
 from mcdreforged.api.all import Serializable
 
@@ -17,6 +17,7 @@ class Config(Serializable):
 	check_interval: float = 60
 	server_jar_path: str = 'server/server.jar'
 	keep_downloaded_jar: bool = True
+	version_blacklist: List[str] = []
 
 	http_proxy: Optional[str] = None
 	https_proxy: Optional[str] = None
